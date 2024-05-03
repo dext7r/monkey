@@ -56,8 +56,8 @@ jobs:
           comment: |
             @coderabbitai review
           reviewers: "h7ml"
-          review-creator: false
-          close: true
+          review-creator: h7ml
+          close: false
             
   notifications:
     runs-on: ubuntu-latest
