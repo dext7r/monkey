@@ -2,11 +2,9 @@ name: ci
 on:
   pull_request:
     branches:
-      - dev
       - main
   pull_request_target:
     branches:
-      - main
       - dev
 jobs:
   delete-logs:
@@ -52,11 +50,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: commit-comment
-        uses: dext7r/commit-comment@main
+        uses: actions-cool/pr-welcome@main
         with:
           token: ${{ secrets.AUTH_TOKEN }}
-          body: |
-            @coderabbit review
+          comment: |
+            @coderabbitai review
+          reviewers: "h7ml"
+          review-creator: false
+          close: true
+            
   notifications:
     runs-on: ubuntu-latest
     steps:
