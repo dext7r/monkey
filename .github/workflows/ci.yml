@@ -3,9 +3,11 @@ on:
   pull_request:
     branches:
       - dev
+      - main
   pull_request_target:
     branches:
       - main
+      - dev
 jobs:
   delete-logs:
     runs-on: ubuntu-latest
