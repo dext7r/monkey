@@ -1,0 +1,78 @@
+name: ci
+on:
+  pull_request:
+    branches:
+      - dev
+  pull_request_target:
+    branches:
+      - main
+jobs:
+  delete-logs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: delete-workflow-run-logs
+        uses: dext7r/deleteWorkflowRunLogs@main
+        with:
+          token: ${{ secrets.AUTH_TOKEN }}
+          per_page: 100
+          expire_time: 7d
+          status: completed
+          repo: ${{ github.repository.repo }}
+          owner: ${{ github.repository.owner }}
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 9.0.4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18.12.0
+          cache: pnpm
+      - name: Get pnpm store directory
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+      - name: Install
+        run: pnpm install
+      - name: Lint
+        run: pnpm lint
+      - name: Build
+        run: pnpm build  
+  comment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: commit-comment
+        uses: dext7r/commit-comment@main
+        with:
+          token: ${{ secrets.AUTH_TOKEN }}
+          body: |
+            @coderabbit review
+  notifications:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Hitokoto Text
+        id: hitokoto
+        run: |
+          hitokoto=$(curl --location --request GET 'https://v1.hitokoto.cn/?encode=json' \
+          --header 'pragma: no-cache' \
+          --header 'priority: u=1, i' \
+          --header 'User-Agent: Apifox/1.0.0 (https://apifox.com)' | jq -r '.hitokoto')
+          echo "::set-output name=HITOKOTO::$hitokoto"
+
+      - name: Push Notifications
+        uses: dext7r/pushNotifications@main
+        with:
+          TYPE: Qmsg
+          TITLE: Hitokoto Notification
+          DESP: ${{ steps.hitokoto.outputs.HITOKOTO }}
+          QMSG_KEY: ${{ secrets.QMSG_KEY }}
+          QMSG_QQ: ${{ secrets.QMSG_QQ }}
+          QMSG_PUSH_TYPE: send
