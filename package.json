@@ -1,6 +1,7 @@
 {
   "name": "@dext7r/monkey",
   "private": true,
+  "author": "h7ml <h7ml@qq.com>",
   "version": "1.0.0",
   "type": "module",
   "scripts": {
@@ -10,15 +11,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
-  "dependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
-  },
   "devDependencies": {
     "@antfu/eslint-config": "^2.16.1",
-    "@types/react": "^18.3.1",
-    "@types/react-dom": "^18.3.0",
-    "@vitejs/plugin-react-swc": "^3.6.0",
     "eslint": "^9.1.1",
     "typescript": "^5.4.5",
     "vite": "^5.2.11",

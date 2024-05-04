@@ -46,18 +46,18 @@ jobs:
         run: pnpm lint
       - name: Build
         run: pnpm build  
-  comment:
-    runs-on: ubuntu-latest
-    steps:
-      - name: commit-comment
-        uses: actions-cool/pr-welcome@main
-        with:
-          token: ${{ secrets.AUTH_TOKEN }}
-          comment: |
-            @coderabbitai review
-          reviewers: "h7ml"
-          review-creator: h7ml
-          close: false
+  # comment:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: commit-comment
+  #       uses: actions-cool/pr-welcome@main
+  #       with:
+  #         token: ${{ secrets.AUTH_TOKEN }}
+  #         comment: |
+  #           @coderabbitai review
+  #         reviewers: "h7ml"
+  #         review-creator: h7ml
+  #         close: false
             
   notifications:
     runs-on: ubuntu-latest
